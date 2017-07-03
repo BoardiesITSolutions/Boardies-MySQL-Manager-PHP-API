@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="a6be5a9a-94e3-45bc-8680-0f627179c956" name="Local Dev Server" url="http://192.168.1.74">
+        <fileTransfer host="192.168.1.74" port="22" rootFolder="/var/www/html/MySQLManager" accessType="SFTP" password="df9fdf9edfc7dfe9dfdfdfdddf93df9adf9b" username="root">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
