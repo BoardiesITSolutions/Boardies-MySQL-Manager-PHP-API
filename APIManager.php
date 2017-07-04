@@ -22,8 +22,6 @@
     
     $postArray = decryptPostArray($_POST);
 
-    $logger->writeToLog("Decrypted Post Array");
-
     switch ($postArray['type'])
     {
         case "GetAPIStatus":
