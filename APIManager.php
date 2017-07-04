@@ -6,7 +6,7 @@
     include_once("StatementRetrievalManager.php");
 
 
-    define("VERSION", "2.0.0.0");
+    define("VERSION", "2.0.0.1");
     
     if (empty($_POST))
     {
