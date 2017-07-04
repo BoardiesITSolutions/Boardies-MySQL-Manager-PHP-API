@@ -23,7 +23,6 @@
     $postArray = decryptPostArray($_POST);
 
     $logger->writeToLog("Decrypted Post Array");
-    $logger->writeToLog(print_r($postArray, true));
 
     switch ($postArray['type'])
     {
