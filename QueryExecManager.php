@@ -49,11 +49,18 @@ class QueryExecManager
         }
         $this->logger->writeToLog("$totalRows row(s) has so far been returned");
         $queryLimitedTo = null;
+
+        //Remove any line breaks from the query, and replace with a space
+        $postArray["query"] = str_replace("\n", " ", $postArray["query"]);
+
+
         if (stripos($postArray["query"], "SELECT") !== false)
         {
             //This fixes issues where WHERE parameters add slashes around the surrounding speech marks
             //quotes causing an issue with the query
+            $this->logger->writeToLog("Before adding slashes query: " . $postArray["query"]);
             $postArray["query"] = $this->addSlahesToWhereParameters($postArray["query"], $connManager->conn);
+            $this->logger->writeToLog("After adding slashes query: " . $postArray["query"]);
             if ($postArray["defaultLimit"] < API_RESULTSET_LIMIT)
             {
                 $queryLimitedTo = $postArray["defaultLimit"];
@@ -343,6 +350,7 @@ class QueryExecManager
      */
     private function getCountOfLimitsInQuery($query)
     {
+        $this->logger->writeToLog("Checking limit count query: $query");
         return substr_count(strtoupper($query), "LIMIT");
     }
 
@@ -366,6 +374,9 @@ class QueryExecManager
         {
             //First check if the query has already been escaped, it should have done as that's how queries work
             //however, remove them, get the WHERE clause and get PHP to escape the parameters values
+
+            //Get the LIMIT string
+            $limitString = substr($query, stripos($query, "LIMIT"));
 
             $query = str_replace("\\'", "'", $query);
             $query = str_replace('\\"', '"', $query);
@@ -463,7 +474,7 @@ class QueryExecManager
                     $processedWhere .= " $key LIKE '$value'";
                 }
             }
-            $newQuery .= " $processedWhere";
+            $newQuery .= " $processedWhere $limitString";
             return $newQuery;
         }
         else
