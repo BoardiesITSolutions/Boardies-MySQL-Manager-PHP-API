@@ -8,12 +8,14 @@
 
     class Encryption
     {
+        private $php_version;
         private $cipher = null;
         private $iv = null;
         private $previousCipher = null;
         private $previousIV = null;
         public function __construct()
         {
+            $this->php_version = phpversion();
             $configManager = new ConfigManager("mysql.conf");
             $this->cipher = $configManager->getConfigItemValue("encryption", "cipher", null);
             if ($this->cipher == null || empty($this->cipher))
@@ -34,11 +36,14 @@
 
         function encrypt($data)
         {
-
-            //$iv = "ryojvlzmdalyglrj";
-            //$key = CIPHERKEY;
-
-            return base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $this->cipher, $this->addpadding($data), MCRYPT_MODE_CBC, $this->iv));
+            if ($this->version[0] === "5")
+            {
+                return base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $this->cipher, $this->addpadding($data), MCRYPT_MODE_CBC, $this->iv));
+            }
+            else
+            {
+                return base64_encode(openssl_encrypt($data, 'AES-256-CBC', $this->cipher, OPENSSL_RAW_DATA, $this->iv));
+            }
         }
 
         private function addpadding($string, $blocksize = 16)
@@ -67,10 +72,17 @@
         {
             try
             {
-
-                $base64Decoded = @base64_decode($data);
-                $decrypted = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $this->cipher, $base64Decoded, MCRYPT_MODE_CBC, $this->iv);
-                return $this->strippadding($decrypted);
+                if ($this->version[0] === "5")
+                {
+                    $decoded = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $this->cipher, $data, MCRYPT_MODE_CBC, $this->iv);
+                    $base64Decoded = @base64_decode($data);
+                    $decrypted = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $this->cipher, $base64Decoded, MCRYPT_MODE_CBC, $this->iv);
+                    return $this->strippadding($decrypted);
+                }
+                else
+                {
+                    return $this->strippadding(openssl_decrypt(base64_decode($data), 'AES-256-CBC', $this->cipher, OPENSSL_RAW_DATA | OPENSSL_ZERO_PADDING, $this->iv));
+                }
             }
             catch (Exception $e)
             {
@@ -78,4 +90,3 @@
             }
         }
     }
-?>

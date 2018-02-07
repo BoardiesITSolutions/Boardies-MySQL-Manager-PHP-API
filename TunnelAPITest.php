@@ -27,4 +27,3 @@
     echo $serverOutput;
     
     curl_close($ch);
-?>

@@ -14,19 +14,27 @@ class StatementRetrievalManager
 
     public function __construct($logID)
     {
-        $this->encryption = new Encryption();
-        $this->logger = new Logger($logID);
+        try
+        {
+            $this->encryption = new Encryption();
+            $this->logger = new Logger($logID);
+        }
+        catch (Exception $ex)
+        {
+            HelperClass::printResponseInCorrectEncodingAndCloseTunnelIfNeeded(null, $ex->getMessage());
+        }
     }
 
     /**
      * The base function class that retrieves the specified SQL statement
-     * @param type $postData The post data that includes the connection details and the type of SQL statement that should be retrieved
+     * @param array $postData The post data that includes the connection details and the type of SQL statement that should be retrieved
+     * @throws Exception
      */
     function getSqlStatement($postData)
     {
         include_once("ConnectionManager.php");
         $helperClass = new HelperClass();
-        $this->connManager = new ConnectionManager();
+        $this->connManager = new ConnectionManager($this->logger->getLogID());
         $status = $this->connManager->connectToDBFromPostArray($postData);
 
         if ($status[RESULT] != SUCCESS)
@@ -247,5 +255,3 @@ class StatementRetrievalManager
         return $line;
     }
 }
-
-?>

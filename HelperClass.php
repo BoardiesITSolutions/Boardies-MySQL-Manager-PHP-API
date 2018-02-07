@@ -38,14 +38,15 @@ error_reporting(1);
             $array[MESSAGE] = $errorMessage;
             return $array;  
         }
-        
+
         /**
-         * Prints out the output to be picked up by Android in the correct format. 
+         * Prints out the output to be picked up by Android in the correct format.
          * If using version 1.2.0.0 or above then the output is encrypted before it is sent
          * back, older versions (older versions don't post the version) revert back to
          * the previous behaviour and the output is not encrypted
          * @param type $postArray The array that was posted from android (includes the version)
          * @param type $response The response that should be json_encoded and possibly encrypted depending on version
+         * @throws Exception
          */
         public static function printResponseInCorrectEncodingAndCloseTunnelIfNeeded($postArray, $response)
         {
@@ -70,9 +71,6 @@ error_reporting(1);
             }
             else
             {
-                //Temporary test for older application backward compatibility testing
-                //TODO: REMOVE THE ENCRYPTION
-                //print json_encode($encryption->decrypt($response));
                 if (isset($response->data))
                 {
                     print json_encode($response->data);
@@ -111,5 +109,3 @@ error_reporting(1);
             return $ip;
         }
     }
-
-?>

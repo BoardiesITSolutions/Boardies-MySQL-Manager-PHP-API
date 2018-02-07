@@ -243,8 +243,9 @@
         /**
          * Returns a JSON array to retrieve all of the databases that are availabe on the connection
          * and calls a function to also get the tables from each database
-         * @param type $postArray The post array that contains that connection details
+         * @param array $postArray The post array that contains that connection details
          * @deprecated This replaced with two separate API calls GetDatabases and GetTables
+         * @throws Exception
          */
         function retrieveDBsAndTables($postArray)
         {
@@ -427,15 +428,18 @@
                 return $this->connectToDB($server, $username, $password, $database, $port, $localTunnelPort, $postArray);
             }
         }
-        
+
         /**
          * Performs the actual MySQL Connection to the server
-         * @param type $server The MySQL Server to connect to
-         * @param type $username The username used for the database connection
-         * @param type $password The password used for the database connection
-         * @param type $database The database to use, can be null (no default database will be selected
-         * @param type $port The port number that should used
-         * @return type Array that details the connection state
+         * @param string $server The MySQL Server to connect to
+         * @param string $username The username used for the database connection
+         * @param string $password The password used for the database connection
+         * @param string $database The database to use, can be null (no default database will be selected
+         * @param string $port The port number that should used
+         * @param string $localTunnelPort
+         * @param null $postArray
+         * @return array that details the connection state
+         * @throws Exception
          */
         function connectToDB($server, $username, $password, $database, $port, $localTunnelPort = "-1", $postArray =  null)
         {
@@ -539,11 +543,12 @@
             }
             return $status;
         }
-        
+
         /**
          * Gets the tables from the specified database
-         * @param type $db The database name where the tables should be retrieved from
-         * @return type An array detailing the error if the tables couldn't be retrieved, or an array of the tables that were retrieved
+         * @param string $db The database name where the tables should be retrieved from
+         * @return array An array detailing the error if the tables couldn't be retrieved, or an array of the tables that were retrieved
+         * @throws Exception
          */
         function getTables($db)
         {
@@ -571,7 +576,6 @@
                 HelperClass::printResponseInCorrectEncodingAndCloseTunnelIfNeeded($this->postArray, $status);
                 exit(); //MySQL Query Failed
             }
-            return $tables;
         }
         
         /**
@@ -589,5 +593,3 @@
             return $status;
         }
     }
-
-?>

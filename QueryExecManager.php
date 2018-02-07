@@ -27,11 +27,12 @@ class QueryExecManager
      * Execute a query using the specified post data. The post data will include
      * the connectin details along with the query.
      * @param $postArray
+     * @throws Exception
      */
     function executeQuery($postArray)
     {
         include_once("ConnectionManager.php");
-        $connManager = new ConnectionManager();
+        $connManager = new ConnectionManager($this->logger->getLogID());
         $status = $connManager->connectToDBFromPostArray($postArray);
         if ($status[RESULT] !== SUCCESS)
         {
@@ -199,6 +200,8 @@ class QueryExecManager
      * @param int $startIndex The start index of the result set to be returned
      * (the first parameter of the limit
      * @param string $query The query to be performed
+     * @param $totalRows
+     * @param $returnLimitParameter
      * @return string The query where the limit string has been converted
      */
     private function getLimitString(&$startIndex, $query, $totalRows, &$returnLimitParameter)
@@ -267,8 +270,8 @@ class QueryExecManager
         $queryChar1Index = $startOfLimitParameter + strlen($limitParamater1) - 1;
         $queryChar2Index = $startOfLimitParameter + strlen($limitParamater1);
 
-        $this->logger->writeToLog("QueryChar1Index", $queryChar1Index);
-        $this->logger->writeToLog("QueryChar2Index", $queryChar2Index);
+        $this->logger->writeToLog("QueryChar1Index: ". $queryChar1Index);
+        $this->logger->writeToLog("QueryChar2Index: ". $queryChar2Index);
 
         if ($query[$queryChar1Index] == ',' || $query[$queryChar2Index] == ',')
         {
@@ -484,5 +487,3 @@ class QueryExecManager
         }
     }
 }
-
-?>

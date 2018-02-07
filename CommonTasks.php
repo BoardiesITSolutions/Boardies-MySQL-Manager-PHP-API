@@ -20,11 +20,12 @@
             }
             return $ip;
         }
-        
+
         /**
          * Will generate a random password at the specified length. If length
          * omitted then it defaults to false
          * @param int $length
+         * @param null $possible
          * @return string
          */
         function generateRandomString($length = 6, $possible = null)
@@ -144,11 +145,11 @@
 
             return "$date $time";
         }
-        
+
         /**
          * Returns a long value of an epoch time stamp, this is based on the
          * current time
-         * @return long
+         * @return int
          */
         function getEpochTimeStamp()
         {
@@ -195,4 +196,3 @@
             }
         }
     }
-?>

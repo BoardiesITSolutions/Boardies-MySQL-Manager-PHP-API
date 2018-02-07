@@ -39,7 +39,7 @@ class Logger
         $this->logHandle = fopen($this->configManager->getConfigItemValue("debug", "debug_log", "api.log"), "a+");
         if (!$this->logHandle)
         {
-            throw new Exception("Unable to open debug log file: Error: " + error_get_last());
+            throw new Exception("Unable to open debug log file: Error: " . error_get_last());
         }
     }
 
@@ -54,7 +54,7 @@ class Logger
 
     /**
      * Write a message to the API log file. A new line will automatically be put on the end of the log message
-     * @param $logMessage The message to be written to the file
+     * @param string $logMessage The message to be written to the file
      */
     public function writeToLog($logMessage)
     {

@@ -74,12 +74,13 @@
                 }
             }
         }
-        
+
         /**
-         * Connects to a database from config array, using ConfigManager class and get the array 
+         * Connects to a database from config array, using ConfigManager class and get the array
          * @param array $configArray Array values from the config file created from ConfigManager.php
          * @return MySQLConnection A valid MySQL Connection Resouce
          * @deprecated since version 1.0.0.5
+         * @throws Exception
          */
         function connectToDBFromConfigArray($configArray)
         {
@@ -96,15 +97,15 @@
             
             return $this->connectToDB($server, $username, $password, $port, $database);
         }
-        
+
         /**
          * Connects to a database using individual variables for username, password and server etc
          * @param String $server The server to connect to
          * @param String $username The username to connect to the server
          * @param String $password The password to connect to the server
          * @param int $port The port to connect to the server
-         * @param String $database 
-         * @return MySQLConnection Valid MySQL Connection resource
+         * @param String $database
+         * @return resource Valid MySQL Connection resource
          * @throws Exception Thrown when failed to connect to database
          */
         function connectToDB($server, $username, $password, $port, $database)
@@ -235,5 +236,3 @@
             }
         }
     }
-
-?>
